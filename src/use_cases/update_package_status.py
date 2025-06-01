@@ -8,20 +8,17 @@ class UpdatePackageStatusUseCase:
     Use case: Update the status of a package.
     Receives via dependency injection:
     - A repository that implements PackageRepository.
-    - (Optional) A notification adapter that has a 'notify_status_changed' method.
     """
 
-    def __init__(self, repository: PackageRepository, notification_adapter=None):
+    def __init__(self, repository: PackageRepository):
         self._repository = repository
-        self._notification = notification_adapter
 
     async def execute(self, package_id: str, new_status: PackageStatus):
         """
         1. Gets the existing package from the repository.
         2. Validates and applies the state change using the domain service.
         3. Persists the updated package.
-        4. (Optional) Calls the notification adapter if present.
-        5. Returns the package with the new state.
+        4. Returns the package with the new state.
 
         Throws:
         - PackageNotFoundError if the repository cannot find the package.
@@ -29,13 +26,9 @@ class UpdatePackageStatusUseCase:
         """
 
         package = await self._repository.get_by_id(package_id)
-
+        
         PackageDomainService.change_status(package, new_status)
 
         await self._repository.save(package)
-
-        if self._notification:
-            #We expect the adapter to implement async def notify_status_changed(pkg)
-            await self._notification.notify_status_changed(package)
 
         return package
