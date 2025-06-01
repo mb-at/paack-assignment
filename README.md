@@ -1,17 +1,17 @@
-#📦 Paack Assignment API
+# Paack Assignment API 📦
 
 A package management API built with FastAPI using hexagonal architecture. Manages package states (`READY → IN_TRANSIT → DELIVERED`), handles concurrent updates safely, provides structured logging etc.
 
 ---
 
-##🛠 Requirements
+## Requirements 🛠
 - Python 3.10 or 3.11
 - pip package manager
 - Docker Desktop (optional for containerized deployment)
 
 ---
 
-##⚙️ Installation
+## Installation ⚙️
 - git clone https://github.com/mb-at/paack-assignment.git
 - cd paack_assignment
 - python -m venv venv
@@ -31,7 +31,7 @@ Install dependencies:
 
 ---
 
-##🚀 Running the API
+## Running the API 🚀
 Local Development (without Docker)
 - uvicorn src.api.main:app --reload
 - Access endpoints:
@@ -50,7 +50,7 @@ Check Logs
 
 ---
 
-## API Endpoints
+## API Endpoints 🔌
 Method	Endpoint	Description
 GET	/health	Service healthcheck
 GET	/packages	List all packages
@@ -62,7 +62,7 @@ Explore API:
 
 ---
 
-## Running Tests
+## Running Tests 🧪
 pytest -q
 Test Coverage:
     - Domain services
