@@ -27,7 +27,7 @@ class InMemoryPackageRepository(PackageRepository):
             package = self._storage.get(package_id)
             if package is None:
                 raise PackageNotFoundError(f"Package with id {package_id} not found.")
-            return Package
+            return package
         
     async def save(self, package: Package) -> None:
         """
@@ -44,3 +44,10 @@ class InMemoryPackageRepository(PackageRepository):
         async with self._lock:
             for package in packages:
                 self._storage[package.id] = package
+
+    async def list_all(self) -> List[Package]:
+        """
+        Returns a list of all Packages currently in memory.
+        """
+        async with self._lock:
+            return list(self._storage.values())

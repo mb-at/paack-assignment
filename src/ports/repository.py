@@ -1,5 +1,6 @@
 from abc import ABC, abstractmethod
-from src.domain import Package
+from typing import List
+from src.domain.entities import Package
 
 class PackageRepository(ABC):
     """
@@ -22,3 +23,9 @@ class PackageRepository(ABC):
         Persists or updates a Package in storage.
         """
         ...
+
+    @abstractmethod
+    async def list_all(self) -> List[Package]:
+        """
+        Returns all stored packages.
+        """
