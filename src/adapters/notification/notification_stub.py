@@ -1,5 +1,8 @@
 import asyncio
+import logging
 from src.domain.entities import Package
+
+logger = logging.getLogger(__name__)
 
 class NotificationStub:
     """
@@ -9,6 +12,13 @@ class NotificationStub:
     """
 
     async def notify_status_changed(self, package: Package) -> None:
-        # Simulate network latency or IO
-        await asyncio.sleep(0.1)
-        print(f"[NotificationStub] Package {package.id} status changed to {package.status}")
+        logger.info("NotificationStub: Notifying status change for package %s", package.id)
+
+        await asyncio.sleep(0.1) # Simulate network latency or IO
+        
+        logger.info(
+            "NotificationStub: Package %s now in status %s (customer_address=%s)",
+            package.id,
+            package.status,
+            package.customer_address,
+        )
