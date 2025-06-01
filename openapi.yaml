@@ -1,0 +1,142 @@
+openapi: 3.1.0
+info:
+  title: Paack Assignment API
+  version: 1.0.0
+paths:
+  /packages:
+    get:
+      summary: List Packages in an especific storage
+      operationId: list_packages_packages_get
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/PackageResponse'
+                type: array
+                title: Response List Packages Packages Get
+  /packages/{package_id}/status:
+    patch:
+      summary: Update Package Status
+      operationId: update_package_status_packages__package_id__status_patch
+      parameters:
+      - name: package_id
+        in: path
+        required: true
+        schema:
+          type: string
+          title: Package Id
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PackageStatusUpdateRequest'
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PackageResponse'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+        '404':
+          description: Not Found Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+        '400':
+          description: Invalid status transition
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+        '500':
+          description: Unexpected Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /health:
+    get:
+      summary: Healthcheck
+      description: 'Healthcheck endpoint. Used to quickly verify
+        that the server is up and running.'
+      operationId: healthcheck_health_get
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+components:
+  schemas:
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
+    PackageResponse:
+      properties:
+        id:
+          type: string
+          title: Id
+        status:
+          $ref: '#/components/schemas/PackageStatus'
+        customer_address:
+          type: string
+          title: Customer Address
+      type: object
+      required:
+      - id
+      - status
+      - customer_address
+      title: PackageResponse
+    PackageStatus:
+      type: string
+      enum:
+      - READY
+      - IN_TRANSIT
+      - DELIVERED
+      title: PackageStatus
+    PackageStatusUpdateRequest:
+      properties:
+        status:
+          $ref: '#/components/schemas/PackageStatus'
+      type: object
+      required:
+      - status
+      title: PackageStatusUpdateRequest
+    ValidationError:
+      properties:
+        loc:
+          items:
+            anyOf:
+            - type: string
+            - type: integer
+          type: array
+          title: Location
+        msg:
+          type: string
+          title: Message
+        type:
+          type: string
+          title: Error Type
+      type: object
+      required:
+      - loc
+      - msg
+      - type
+      title: ValidationError
